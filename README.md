@@ -9,7 +9,6 @@ Log in to azure:
 az login
 ```
 
-
 Prepare ./terraform/secret.tfvars file with:  
 MICROSOFT_PROVIDER_AUTHENTICATION_SECRET = ""
 
@@ -27,8 +26,12 @@ cd ./FunctionApps/uploadFunApp/PythonFunctionsProject
 func azure functionapp publish imgs-fun-app
 ```
 
-
 ```shell
 cd ./FunctionApps/Cognitive/CognitiveFunProject
 func azure functionapp publish cognitive-fa
+```
+
+Destroy
+```shell
+terraform destroy -var-file="secret.tfvars"
 ```
