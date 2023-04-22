@@ -23,12 +23,12 @@ terraform apply -auto-approve terraformplan
 Deploy function apps:
 ```shell
 cd ./FunctionApps/uploadFunApp/PythonFunctionsProject
-func azure functionapp publish imgs-fun-app
+func azure functionapp publish imgs-fun-app --python
 ```
 
 ```shell
 cd ./FunctionApps/Cognitive/CognitiveFunProject
-func azure functionapp publish cognitive-fa
+func azure functionapp publish cognitive-fa --python
 ```
 
 Destroy
