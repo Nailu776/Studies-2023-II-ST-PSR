@@ -1,0 +1,25 @@
+
+### OLD
+https://codez.deedx.cz/posts/automating-azure-ad-b2c-creation-with-terraform/ 
+How to delete Azure AD B2C Tenant
+https://learn.microsoft.com/en-us/azure/active-directory-b2c/tutorial-delete-tenant
+### Create Auth func python:    ### OLD
+python3 -m venv venv
+source venv/bin/activate
+pip install azure-functions azure-functions-worker Flask-OAuthlib
+func init --worker-runtime python
+func new --name AuthenticationFunction --template "HTTP trigger"
+func start
+# Gen Flask Secret Key  ### OLD
+python3 -c 'import secrets; print(secrets.token_hex())'
+### OLD
+https://helpcenter.veeam.com/docs/vbo365/guide/ad_application_settings_configuring.html?ver=70
+
+
+### Not old 
+python3 -m venv venv
+source venv/bin/activate
+func init UploadFunctionProject --python
+func new --name HttpExample --template "HTTP trigger" --authlevel "anonymous"
+func new --name AuthenticationFunction --template "HTTP trigger"
+func start

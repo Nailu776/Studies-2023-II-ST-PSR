@@ -1,0 +1,52 @@
+NOW:
+zrobie zgodnie z tutorialem
+https://medium.com/@bablulawrence/securing-azure-functions-using-easy-auth-and-app-roles-bdef154356bd
+
+
+New app:
+imgs-fun-app-client
+uri https://frontstorageacc.blob.core.windows.net/frontend/index.html
+app id: f9d494da-e196-467f-8a69-f4df628744f9
+secret: 92O8Q~nlpD9hOYgTuSB49zbEHQvz3iU4lOaJ~deo
+id: a8e68dae-d571-4522-abcf-76703b3a5f0b
+
+Create user:
+adam.kow@julianhelwigstudentputpozna.onmicrosoft.com
+Atoprostepasy12
+
+
+
+
+BELOW is old:
+
+Goto 
+Tenant
+(Policies) User Flows
++ New user flows
+B2C_1_SISU
+	
+Sign up and sign in (Recommended)
+	
+Off
+
+https://psr2023tenanttest.b2clogin.com/psr2023tenanttest.onmicrosoft.com/B2C_1_SISU/v2.0/.well-known/openid-configuration
+Go and write down:
+issuer	"https://psr2023tenanttest.b2clogin.com/xyz/v2.0/"
+
+Goto
+Tenant 
+App registrations
+Note down following:
+    psr2023-auth:
+        App (client) id: 
+        Tenant       id: 
+        Create secret and note following:
+            value:  
+            id: 
+
+Then go to Imgs fun app:
+(Settings) Authentication
+Add identyficator provider
+    Microsoft
+    Use Existing (psr2023-auth)
+    401

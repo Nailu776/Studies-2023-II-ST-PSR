@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision</title>
+    <link rel="icon" type="image/x-icon" href="/frontend/favicon.ico">
+    <style>
+        img {
+            max-width: 200px;
+            max-height: 200px;
+            margin: 10px;
+        }
+        p {
+            margin: 10px;
+        }
+    </style>
+    <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
+    <script>
+
+        // Config to login and token acquire
+        const msalConfig = {
+            auth: {
+                clientId: "f9d494da-e196-467f-8a69-f4df628744f9",
+                redirectUri: "https://frontstorageacc.blob.core.windows.net/frontend/index.html",
+            }
+        };
+
+        // Scopes for token request
+        const tokenRequest = {
+            scopes: ["api://27d877fa-232c-4c9c-9297-b81f27cb2e6a/user_impersonation"]
+        };
+
+        // Init msalInstance
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+        async function initialize(){
+            await msalInstance.initialize();
+        }
+        initialize();
+
+        // SignIn function
+        async function signIn(){
+            try {
+                const loginResponse = await msalInstance.loginPopup({});
+                const myAccounts = msalInstance.getAllAccounts();
+                console.log("MyAccounts: " + myAccounts);
+                console.log(myAccounts);
+                acquireMyToken();
+            } catch (err) {
+                // handle error
+                console.log(err);
+            }
+        }
+
+        // TODO: safe to storage so it won't disapear after refresh
+        // https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
+        // Save access Token (don't login every time with login click)
+        var myAccessToken = {
+            token: acquireMyToken(),
+            done: false
+        }
+
+        // Acquire access token
+        async function acquireMyToken() {
+            try {
+                msalInstance.acquireTokenSilent(tokenRequest).then(tokenResponse => {
+                    // Do something with the tokenResponse
+                    // console.log("Success token (on silent try)");
+                    // console.log(tokenResp);
+                    // console.log(tokenResp.accessToken);
+                    myAccessToken.token = tokenResp.accessToken;
+                    myAccessToken.done = true;
+                    // console.log("My token: " + myAccessToken.token);
+                    // console.log("My token done: " + myAccessToken.done );
+                }).catch(async (error) => {
+                    // if (error instanceof InteractionRequiredAuthError) {
+                    // fallback to interaction when silent call fails
+                    // console.log("acquireMyToken.acquireTokenSilent.acquireTokenPopup");
+                    msalInstance.acquireTokenPopup(tokenRequest).then(tokenResp => {
+                        // console.log("Success token after (perhaps) InteractionRequiredAuthError");
+                        // console.log(tokenResp);
+                        // console.log(tokenResp.accessToken);
+                        myAccessToken.token = tokenResp.accessToken;
+                        myAccessToken.done = true;
+                        // console.log("My token: " + myAccessToken.token);
+                        // console.log("My token done: " + myAccessToken.done );
+                    }).catch(async (error) => {
+                        console.log(error);
+                    })
+                })
+            } catch (error) {
+                console.error("Error during sign in:", error);
+            }
+        }
+
+        // TODO: Don't construct request Headers with every click 
+        // var myRequestHeaders = {
+        //     headers: constructAuthBearer(),
+        //     done: false
+        // }
+        // async function constructAuthBearer(){
+        //     if(!myAccessToken.done)
+        //         myAccessToken.token = await acquireMyToken();
+        //     if(myAccessToken.done){
+        //         var headers = new Headers();
+        //         var bearer = "Bearer " + myAccessToken.token;
+        //         headers.append("Authorization", bearer);
+        //         myRequestHeaders.headers = headers;
+        //         myRequestHeaders.done = true;
+        //         console.log("headers: " + headers);
+        //         console.log("myRequestHeaders.header: " + myRequestHeaders.headers);
+        //         return headers;
+        //     }
+        //     else {
+        //         console.log("Error in construct Auth Bearer.");
+        //     }
+        // }
+
+        // Published: Replace with your Function App URLs
+        const uploadFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/uploadimg';
+        const listImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/exploreimgs';
+        const deleteImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/deleteimgs';
+
+        // Localhost test: Replace with your Function App URLs
+        // const uploadFunctionUrl = 'http://localhost:7071/api/UpLoadImg';
+        // const listImagesFunctionUrl = 'http://localhost:7071/api/ExploreImgs';
+        // const deleteImagesFunctionUrl = 'http://localhost:7071/api/deleteimgs';
+
+        async function deleteImages() {
+            // if(!myRequestHeaders.done)
+            //     myRequestHeaders.headers = constructAuthBearer();
+
+            var headers = new Headers();
+            var bearer = "Bearer " + myAccessToken.token;
+            headers.append("Authorization", bearer);
+            var options = {
+                    method: "GET",
+                    headers: headers
+            };
+            // console.log("DeleteImgs.options.header: " + options.headers);
+            const response = await fetch(deleteImagesFunctionUrl, options);
+            // console.log(response);
+            if (response.ok) {
+                console.log("Images deleted.");
+            } else {
+                console.log("Failed to delete images");
+            }
+        }
+
+        async function uploadImage() {
+            const input = document.getElementById('image-input');
+            const file = input.files[0];
+            if (!file) {
+                alert('Please select a file to upload');
+                return;
+            }
+            const formData = new FormData();
+            formData.append('image', file);
+            // if(!myRequestHeaders.done)
+            //     myRequestHeaders.headers = constructAuthBearer();
+
+            var headers = new Headers();
+            var bearer = "Bearer " + myAccessToken.token;
+            headers.append("Authorization", bearer);
+            var options = {
+                    method: "POST",
+                    body: formData,
+                    headers: headers
+            };
+            // console.log("uploadImage.options.header: " + options.headers);
+
+
+            const response = await fetch(uploadFunctionUrl, options);
+            if (response.ok) {
+                alert('Image uploaded successfully');
+            } else {
+                alert('Failed to upload image');
+            }
+        }
+
+        async function fetchImages(accessToken){
+            // if(!myRequestHeaders.done)
+            //     myRequestHeaders.headers = constructAuthBearer();
+            var headers = new Headers();
+            var bearer = "Bearer " + myAccessToken.token;
+            headers.append("Authorization", bearer);
+            var options = {
+                    method: "GET",
+                    headers: headers
+            };
+            // console.log("fetchImages.options.header: " + options.headers);
+            const response = await fetch(listImagesFunctionUrl, options);
+            // console.log(response);
+
+            if (response.ok) {
+                const images = await response.json();
+                const container = document.getElementById('image-container');
+                container.innerHTML = '';
+
+                for (const image of images) {
+                    // Create Image element
+                    const img = document.createElement('img');
+                    img.src = image.url;
+                    img.alt = image.name;
+                    container.appendChild(img);
+
+                    // Create title
+                    const title = document.createElement('p');
+                    title.innerText = 'File name: ' + image.name;
+                    container.appendChild(title);
+
+                    // Create AI description
+                    const desc = document.createElement('p');
+                    desc.innerText = image.description;
+                    container.appendChild(desc);
+                }
+            } else {
+                console.log("Failed to fetch images");
+            }
+        }
+
+
+
+    </script>
+</head>
+<body>
+    <h1>How AI Sees Our World?</h1>
+    <input type="file" id="image-input">
+    <button onclick="signIn()">Sign In</button>
+    <button onclick="uploadImage()">Upload Image</button>
+    <button onclick="fetchImages()">Show Images</button>
+    <button onclick="deleteImages()">Delete Images</button>
+    <div id="image-container"></div>
+</body>
+</html>

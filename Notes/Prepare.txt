@@ -1,0 +1,39 @@
+OLD how to prepare auth with b2c tenant from azure AD
+
+https://codez.deedx.cz/posts/automating-azure-ad-b2c-creation-with-terraform/
+
+TODO (manually):
+
+Create user flows
+
+Res groups --> tenant --> Open B2C Tenant --> (Left) Policies --> User Flows --> New User Flow
+Now:
+    - Sign up / Sign in 
+    - Recommended (left option not legacy)
+    - Create 
+Next:
+    - name : B2C_1_PSR2023FLOW1
+    - email singup
+    - 5. show more:
+        - Display name (check + check)
+        - Email Addresses 
+    - create
+
+Client ID:
+    - copy :Application (client) ID
+    from Azure B2C AD App Registrations 
+
+
+Secrets:
+psr2023-auth-app | Certificates & secrets
+get AZURE_AD_B2C_CLIENT_SECRET
+
+API permissions 
+Add a permission 
+My apis 
+psr2023-auth-app
+
+GRANT admin consent 
+https://psr2023tenanttest.b2clogin.com/tfp/psr2023tenanttest/B2C_1_PSR2023FLOW1/
+
+https://psr2023tenanttest.b2clogin.com/psr2023tenanttest.onmicrosoft.com/B2C_1_SISU/v2.0/.well-known/openid-configuration

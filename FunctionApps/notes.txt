@@ -1,0 +1,21 @@
+python3 -m venv venv
+source venv/bin/activate
+func init PythonFunctionsProject --python
+func new --name UpLoadImg --template "HTTP trigger" --authlevel "anonymous"
+func new --name ExploreImgs --template "HTTP trigger" --authlevel "anonymous"
+func new --name DeleteImgs --template "HTTP trigger" --authlevel "anonymous"
+
+// In another project (isolation) - another Function App
+func new --name AnalyzeImgs --template "Azure Blob Storage trigger" --worker-runtime python
+
+func azure functionapp publish imgs-fun-app
+
+Functions in imgs-fun-app:
+    DeleteImgs - [httpTrigger]
+        Invoke url: https://imgs-fun-app.azurewebsites.net/api/deleteimgs
+
+    ExploreImgs - [httpTrigger]
+        Invoke url: https://imgs-fun-app.azurewebsites.net/api/exploreimgs
+
+    UpLoadImg - [httpTrigger]
+        Invoke url: https://imgs-fun-app.azurewebsites.net/api/uploadimg
