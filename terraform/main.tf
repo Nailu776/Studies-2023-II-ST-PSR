@@ -38,6 +38,9 @@ module "cognitive" {
 
 module "front" {
   source = "./modules/front"
+  depends_on = [
+    azurerm_resource_group.psr2023_res
+  ]
   # Generic
   res_group_name = var.res_group_name
   res_group_location = var.res_group_location
