@@ -232,10 +232,9 @@
 
             if (response.ok) {
                 const images = await response.json();
-                const carousel = document.getElementById('carousel-container');
-                // const carouselinner = document.getElementById('carousel-inner');
-
-                // carousel.innerHTML = '';
+                // const carousel = document.getElementById('carousel-container');
+                const carousel = document.getElementById('carousel-items');
+                carousel.innerHTML = '';
 
                 images.forEach((image, index) => {
                     // Create carousel item div
@@ -264,12 +263,12 @@
 
                     // Create title
                     const title = document.createElement('h5');
-                    title.innerText = 'File name: ' + image.name;
+                    title.innerText = 'Title: ' + image.name;
                     textContainer.appendChild(title);
 
                     // Create AI description
                     const desc = document.createElement('p');
-                    desc.innerText = image.description;
+                    desc.innerText = 'Desc: ' +image.description;
                     textContainer.appendChild(desc);
 
                     // Add carousel item to carousel container
@@ -322,7 +321,7 @@
             </div>
         </div>
         <div id="carousel-container" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner"></div>
+            <div class="carousel-inner" id="carousel-items"></div>
             <a class="carousel-control-prev" href="#carousel-container" role="button" data-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="sr-only">Previous</span>
