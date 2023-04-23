@@ -1,24 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"crossorigin="anonymous">
-
-    <!-- Bootstrap JavaScript and its dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"  crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"  crossorigin="anonymous"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Vision</title>
+    <link rel="icon" type="image/x-icon" href="/frontend/favicon.ico">
     <style>
-        .img-thumbnail {
-            max-width: 200px;
-            max-height: 200px;
-            margin: 10px;
-        }
         img {
             max-width: 200px;
             max-height: 200px;
@@ -27,29 +14,7 @@
         p {
             margin: 10px;
         }
-        .card-img-top {
-            max-width: 100%;
-            max-height: 200px;
-            object-fit: cover;
-        }
-        .carousel {
-            width: 100%;
-            max-height: 400px;
-            overflow: hidden;
-        }
-        .carousel-inner {
-            max-height: 400px;
-        }
-        .carousel-item img {
-            max-height: 400px;
-            object-fit: cover;
-        }
     </style>
-    <!-- Your JavaScript code here -->
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Vision</title>
-    <link rel="icon" type="image/x-icon" href="/frontend/favicon.ico">
     <script type="text/javascript" src="https://alcdn.msauth.net/browser/2.35.0/js/msal-browser.min.js"></script>
     <script>
 
@@ -78,12 +43,9 @@
             try {
                 const loginResponse = await msalInstance.loginPopup({});
                 const myAccounts = msalInstance.getAllAccounts();
-                console.log("MyAccounts (in next log): " + myAccounts);
+                console.log("MyAccounts: " + myAccounts);
                 console.log(myAccounts);
                 acquireMyToken();
-                if(myAccessToken.done){
-                    console.log("myAccessToken: " + myAccessToken.token);
-                }
             } catch (err) {
                 // handle error
                 console.log(err);
@@ -232,49 +194,26 @@
 
             if (response.ok) {
                 const images = await response.json();
-                const carousel = document.getElementById('carousel-container');
-                // const carouselinner = document.getElementById('carousel-inner');
+                const container = document.getElementById('image-container');
+                container.innerHTML = '';
 
-                // carousel.innerHTML = '';
-
-                images.forEach((image, index) => {
-                    // Create carousel item div
-                    const carouselItem = document.createElement('div');
-                    carouselItem.classList.add('carousel-item');
-                    if (index === 0) {
-                        carouselItem.classList.add('active');
-                    }
-
-                    // Create image and text container
-                    const carouselContent = document.createElement('div');
-                    carouselContent.classList.add('d-flex', 'justify-content-between', 'align-items-center');
-                    carouselItem.appendChild(carouselContent);
-
-                    // Create image element
+                for (const image of images) {
+                    // Create Image element
                     const img = document.createElement('img');
                     img.src = image.url;
                     img.alt = image.name;
-                    img.style.maxWidth = '50%';
-                    img.style.height = 'auto';
-                    carouselContent.appendChild(img);
-
-                    // Create text container
-                    const textContainer = document.createElement('div');
-                    carouselContent.appendChild(textContainer);
+                    container.appendChild(img);
 
                     // Create title
-                    const title = document.createElement('h5');
+                    const title = document.createElement('p');
                     title.innerText = 'File name: ' + image.name;
-                    textContainer.appendChild(title);
+                    container.appendChild(title);
 
                     // Create AI description
                     const desc = document.createElement('p');
                     desc.innerText = image.description;
-                    textContainer.appendChild(desc);
-
-                    // Add carousel item to carousel container
-                    carousel.appendChild(carouselItem);
-                });
+                    container.appendChild(desc);
+                }
             } else {
                 console.log("Failed to fetch images");
             }
@@ -284,8 +223,7 @@
 
     </script>
 </head>
-<!-- Simple html body -->
-<!-- <body>
+<body>
     <h1>How AI Sees Our World?</h1>
     <input type="file" id="image-input">
     <button onclick="signIn()">Sign In</button>
@@ -293,45 +231,5 @@
     <button onclick="fetchImages()">Show Images</button>
     <button onclick="deleteImages()">Delete Images</button>
     <div id="image-container"></div>
-</body> -->
-<!-- Frontend enrich -->
-<body>
-    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <a class="navbar-brand" href="#">How AI Sees Our World?</a>
-    </nav>
-    <div class="container mt-4">
-        <div class="row">
-            <div class="col-md-6">
-                <h2>Sign In (console.log(token))</h2>
-                <button class="btn btn-primary" onclick="signIn()">Sign In</button>
-            </div>
-            <div class="col-md-6">
-                <h2>Upload Single Image</h2>
-                <div class="form-group">
-                    <input type="file" class="form-control-file" id="image-input">
-                </div>
-                <button class="btn btn-primary" onclick="uploadImage()">Upload Image</button>
-            </div>
-            <div class="col-md-6">
-                <h2>Show All Images</h2>
-                <button class="btn btn-primary" onclick="fetchImages()">Show Images</button>
-            </div>
-            <div class="col-md-6">
-                <h2>Delete All Images</h2>
-                <button class="btn btn-primary" onclick="deleteImages()">Delete Images</button>
-            </div>
-        </div>
-        <div id="carousel-container" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner"></div>
-            <a class="carousel-control-prev" href="#carousel-container" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carousel-container" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
 </body>
 </html>
