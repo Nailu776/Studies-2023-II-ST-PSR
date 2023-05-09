@@ -9,7 +9,7 @@ resource "azurerm_storage_account" "imgs_storage_acc" {
 
 # Container for images
 resource "azurerm_storage_container" "image_container" {
-  name                  = "images"
+  name                  = var.image_container_name
   storage_account_name  = azurerm_storage_account.imgs_storage_acc.name
   container_access_type = "container"
 }
@@ -40,7 +40,7 @@ resource "azurerm_storage_account" "imgs_fun_storage_acc" {
 
 # Service plan for App Function
 resource "azurerm_service_plan" "imgs_fun_service_plan" {
-  name                = "imgs-fun-service-plan"
+  name                = var.imgs_fun_service_plan_name
   resource_group_name = var.res_group_name
   location            = var.res_group_location
   os_type             = "Linux"
@@ -49,7 +49,7 @@ resource "azurerm_service_plan" "imgs_fun_service_plan" {
 
 # Function app for upload and download images
 resource "azurerm_linux_function_app" "imgs_fun_app" {
-  name                       = "imgs-fun-app"
+  name                       = var.imgs_fun_app_name
   resource_group_name        = var.res_group_name
   location                   = var.res_group_location
   service_plan_id            = azurerm_service_plan.imgs_fun_service_plan.id
@@ -70,7 +70,7 @@ resource "azurerm_linux_function_app" "imgs_fun_app" {
     }
     cors {
       allowed_origins     = [
-        "https://frontstorageacc.blob.core.windows.net"
+        "https://frontstorageacc1.blob.core.windows.net"
       ]
       support_credentials = false
     }

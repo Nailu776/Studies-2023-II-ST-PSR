@@ -10,22 +10,34 @@ variable "res_group_location" {
   default     = "West Europe"
 }
 
-variable "upload_storage_account_name" {
-  type        = string
-  description = "Name of upload storage account."
-  default     = "uploadfunstorageacc"
-}
-
 variable "cognitive_fa_storage_acc_name" {
   type        = string
   description = "Name of cognitive storage account."
-  default     = "cognitivefunstorageacc"
+  default     = "cognitivefunstorageacc1"
 }
+
+variable "azurerm_cognitive_account_name" {
+  type        = string
+  description = "Name of cognitive account."
+  default     = "psr-cognitive-acc"
+}
+
+variable "cognitive_fa_service_plan_name" {
+  type        = string
+  description = "Name of cognitive fa service plan."
+  default     = "cognitive_fa_service_plan"
+}
+
+variable "cognitive_fun_app_name" {
+  type        = string
+  description = "Name of cognitive cognitive fun app."
+  default     = "cognitive-fa1"
+}
+
 
 variable "desc_storage_table_name" {
   type        = string
   description = "Name of upload storage table."
-  default     = "imagedescriptions"
 }
 
 variable "imgs_storage_connection_string" {

@@ -44,4 +44,5 @@ module "front" {
   # Generic
   res_group_name = var.res_group_name
   res_group_location = var.res_group_location
+  front_storage_account_name = var.front_storage_account_name
 }

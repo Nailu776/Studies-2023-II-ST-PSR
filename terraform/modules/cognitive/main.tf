@@ -1,7 +1,7 @@
 # Cognitive for ComputerVision
 # Free 0 tier
 resource "azurerm_cognitive_account" "cognitive_acc" {
-  name                = "psr-cognitive-acc"
+  name                = var.azurerm_cognitive_account_name
   resource_group_name = var.res_group_name
   location            = var.res_group_location
   kind                = "ComputerVision"
@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "cognitive_fa_storage_acc" {
 
 # Service plan for cognitive function app
 resource "azurerm_service_plan" "cognitive_fa_service_plan" {
-  name                = "cognitive_fa_service_plan"
+  name                = var.cognitive_fa_service_plan_name
   resource_group_name = var.res_group_name
   location            = var.res_group_location
   os_type             = "Linux"
@@ -32,7 +32,7 @@ resource "azurerm_service_plan" "cognitive_fa_service_plan" {
 
 # Function App for only cognitive service
 resource "azurerm_linux_function_app" "cognitive_fun_app" {
-  name                       = "cognitive-fa"
+  name                       = var.cognitive_fun_app_name
   resource_group_name        = var.res_group_name
   location                   = var.res_group_location
   service_plan_id            = azurerm_service_plan.cognitive_fa_service_plan.id

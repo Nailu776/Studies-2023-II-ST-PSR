@@ -14,7 +14,7 @@ resource "azurerm_storage_account" "front_storage_acc" {
 
 # Container for frontend
 resource "azurerm_storage_container" "frontend_container" {
-  name                  = "frontend"
+  name                  = var.frontend_container_name
   storage_account_name  = azurerm_storage_account.front_storage_acc.name
   # Public access
   container_access_type = "container"
@@ -30,7 +30,7 @@ resource "azurerm_storage_blob" "front_blob" {
   source                 = "${path.module}/MyFrontend/index.html"
 }
 
-#Add index.html to blob storage
+#Add favicon.ico to blob storage
 resource "azurerm_storage_blob" "favicon_blob" {
   name                   = var.favicon
   storage_account_name   = azurerm_storage_account.front_storage_acc.name
