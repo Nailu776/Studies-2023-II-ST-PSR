@@ -14,6 +14,53 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"  crossorigin="anonymous"></script>
 
     <style>
+                /* Style the upload button */
+                .upload-button {
+          padding: 10px 20px;
+          background-color: #4CAF50;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+        
+        /* Style the popup */
+        .popup {
+          display: none;
+          position: fixed;
+          z-index: 1;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          overflow: auto;
+          background-color: rgba(0,0,0,0.5);
+        }
+        
+        /* Style the popup content */
+        .popup-content {
+          background-color: #fefefe;
+          margin: 10% auto;
+          padding: 20px;
+          border: 1px solid #888;
+          width: 80%;
+          max-width: 600px;
+        }
+        
+        /* Style the close button */
+        .close-button {
+          float: right;
+          font-size: 28px;
+          font-weight: bold;
+          color: #888;
+          margin-top: -10px;
+          margin-right: -10px;
+          cursor: pointer;
+        }
+        
+        .close-button:hover {
+          color: #000;
+        }
+
         .img-thumbnail {
             max-width: 200px;
             max-height: 200px;
@@ -57,7 +104,7 @@
         const msalConfig = {
             auth: {
                 clientId: "f9d494da-e196-467f-8a69-f4df628744f9",
-                redirectUri: "https://frontstorageacc.blob.core.windows.net/frontend/index.html",
+                redirectUri: "https://frontstorageacc1.blob.core.windows.net/frontend/index.html",
             }
         };
 
@@ -76,11 +123,11 @@
         // SignIn function
         async function signIn(){
             try {
-                const loginResponse = await msalInstance.loginPopup({});
-                const myAccounts = msalInstance.getAllAccounts();
-                console.log("MyAccounts (in next log): " + myAccounts);
-                console.log(myAccounts);
-                acquireMyToken();
+                // const loginResponse = await msalInstance.loginPopup({});
+                // const myAccounts = msalInstance.getAllAccounts();
+                // console.log("MyAccounts (in next log): " + myAccounts);
+                // console.log(myAccounts);
+                myAccessToken.token = acquireMyToken();
                 if(myAccessToken.done){
                     console.log("myAccessToken: " + myAccessToken.token);
                 }
@@ -90,11 +137,20 @@
             }
         }
 
+        async function changeVisibility(){
+            document.getElementById('signInButton').hidden = true;
+            document.getElementById('uploadButton').hidden = false;               
+            document.getElementById('carousel-container').hidden = false;
+            document.getElementById('deleteSection').hidden = false; 
+            document.getElementById('imageSection').hidden = false;               
+            
+        }
+
         // TODO: safe to storage so it won't disapear after refresh
         // https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage
         // Save access Token (don't login every time with login click)
         var myAccessToken = {
-            token: acquireMyToken(),
+            token: null,
             done: false
         }
 
@@ -108,6 +164,7 @@
                     // console.log(tokenResp.accessToken);
                     myAccessToken.token = tokenResp.accessToken;
                     myAccessToken.done = true;
+                    changeVisibility();
                     // console.log("My token: " + myAccessToken.token);
                     // console.log("My token done: " + myAccessToken.done );
                 }).catch(async (error) => {
@@ -120,6 +177,7 @@
                         // console.log(tokenResp.accessToken);
                         myAccessToken.token = tokenResp.accessToken;
                         myAccessToken.done = true;
+                        changeVisibility();
                         // console.log("My token: " + myAccessToken.token);
                         // console.log("My token done: " + myAccessToken.done );
                     }).catch(async (error) => {
@@ -155,9 +213,9 @@
         // }
 
         // Published: Replace with your Function App URLs
-        const uploadFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/uploadimg';
-        const listImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/exploreimgs';
-        const deleteImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/deleteimgs';
+        const uploadFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/uploadimg';
+        const listImagesFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/exploreimgs';
+        const deleteImagesFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/deleteimgs';
 
         // Localhost test: Replace with your Function App URLs
         // const uploadFunctionUrl = 'http://localhost:7071/api/UpLoadImg';
@@ -279,8 +337,6 @@
             }
         }
 
-
-
     </script>
 </head>
 <!-- Simple html body -->
@@ -296,26 +352,29 @@
 <!-- Frontend enrich -->
 <body>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
-        <a class="navbar-brand" href="#">How AI Sees Our World?</a>
+        <a class="navbar-brand" href="#" float="left">How AI Sees Our World?</a>
+        <button id="signInButton" class="btn btn-primary" float="right" onclick="signIn()" >Sign In</button>                        </div>
     </nav>
+    <button id="uploadButton" hidden class="btn btn-primary" float="left" onclick="showPopup()" >Upload images</button>
+    <div id="upload-popup" class="popup">
+        <!-- Popup content -->
+        <div class="popup-content">
+          <span class="close-button" onclick="hidePopup()">&times;</span>
+          <h2>Upload Image</h2>
+          <form action="#" method="post" enctype="multipart/form-data">
+            <label for="image">Select an image:</label>
+            <input type="file" id="image" name="image" accept="image/*">
+            <input type="submit" value="Upload" onclick="uploadImage()">
+          </form>
+        </div>
+    </div>
     <div class="container mt-4">
         <div class="row">
-            <div class="col-md-6">
-                <h2>Sign In (console.log(token))</h2>
-                <button class="btn btn-primary" onclick="signIn()">Sign In</button>
-            </div>
-            <div class="col-md-6">
-                <h2>Upload Single Image</h2>
-                <div class="form-group">
-                    <input type="file" class="form-control-file" id="image-input">
-                </div>
-                <button class="btn btn-primary" onclick="uploadImage()">Upload Image</button>
-            </div>
-            <div class="col-md-6">
+            <div id="imageSection" hidden class="col-md-6">
                 <h2>Show All Images</h2>
                 <button class="btn btn-primary" onclick="fetchImages()">Show Images</button>
             </div>
-            <div class="col-md-6">
+            <div id="deleteSection" hidden class="col-md-6">
                 <h2>Delete All Images</h2>
                 <button class="btn btn-primary" onclick="deleteImages()">Delete Images</button>
             </div>
@@ -333,4 +392,18 @@
         </div>
     </div>
 </body>
+<script>
+    // Get the popup element
+    var popup = document.getElementById("upload-popup");
+    
+    // Show the popup
+    function showPopup() {
+      popup.style.display = "block";
+    }
+    
+    // Hide the popup
+    function hidePopup() {
+      popup.style.display = "none";
+    }
+  </script>
 </html>
