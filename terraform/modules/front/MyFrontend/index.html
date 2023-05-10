@@ -14,8 +14,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"  crossorigin="anonymous"></script>
 
     <style>
-                /* Style the upload button */
-                .upload-button {
+        /* Style the upload button */
+        .upload-button {
           padding: 10px 20px;
           background-color: #4CAF50;
           color: white;
@@ -83,6 +83,7 @@
             width: 100%;
             max-height: 400px;
             overflow: hidden;
+            position: relative;
         }
         .carousel-inner {
             max-height: 400px;
@@ -90,6 +91,17 @@
         .carousel-item img {
             max-height: 400px;
             object-fit: cover;
+        }
+        .carousel-control-prev, .carousel-control-next {
+            width: auto;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.25);
+        }
+        .carousel-control-prev-icon, .carousel-control-next-icon {
+            height: 50px;
+            width: 50px;
         }
     </style>
     <!-- Your JavaScript code here -->
@@ -104,7 +116,7 @@
         const msalConfig = {
             auth: {
                 clientId: "f9d494da-e196-467f-8a69-f4df628744f9",
-                redirectUri: "https://frontstorageacc1.blob.core.windows.net/frontend/index.html",
+                redirectUri: "https://frontstorageacc.blob.core.windows.net/frontend/index.html",
             }
         };
 
@@ -213,9 +225,9 @@
         // }
 
         // Published: Replace with your Function App URLs
-        const uploadFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/uploadimg';
-        const listImagesFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/exploreimgs';
-        const deleteImagesFunctionUrl = 'https://imgs-fun-app1.azurewebsites.net/api/deleteimgs';
+        const uploadFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/uploadimg';
+        const listImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/exploreimgs';
+        const deleteImagesFunctionUrl = 'https://imgs-fun-app.azurewebsites.net/api/deleteimgs';
 
         // Localhost test: Replace with your Function App URLs
         // const uploadFunctionUrl = 'http://localhost:7071/api/UpLoadImg';
@@ -359,13 +371,15 @@
     <div id="upload-popup" class="popup">
         <!-- Popup content -->
         <div class="popup-content">
-          <span class="close-button" onclick="hidePopup()">&times;</span>
-          <h2>Upload Image</h2>
-          <form action="#" method="post" enctype="multipart/form-data">
+            <span class="close-button" onclick="hidePopup()">&times;</span>
+            <!-- <div class="form-group">
+                <input type="file" class="form-control-file" id="image-input">
+            </div>-->
+
             <label for="image">Select an image:</label>
-            <input type="file" id="image" name="image" accept="image/*">
-            <input type="submit" value="Upload" onclick="uploadImage()">
-          </form>
+            <input type="file" id="image-input" name="image" accept="image/*">
+            <button class="btn btn-primary" onclick="uploadImage()">Upload</button>
+
         </div>
     </div>
     <div class="container mt-4">

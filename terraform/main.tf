@@ -13,6 +13,7 @@ module "upload" {
   res_group_name      = var.res_group_name
   res_group_location  = var.res_group_location
   # Storage acc specific 
+  imgs_fun_app_name = var.imgs_fun_app_name
   desc_storage_table_name       = var.desc_storage_table_name
   desc_storage_account_name     = var.desc_storage_account_name
   images_storage_account_name   = var.images_storage_account_name
@@ -26,6 +27,7 @@ module "cognitive" {
   res_group_name = var.res_group_name
   res_group_location = var.res_group_location
   # Storage acc specific 
+  cognitive_fun_app_name = var.cognitive_fun_app_name
   cognitive_fa_storage_acc_name   = var.cognitive_fa_storage_acc_name
   imgs_storage_connection_string  = module.upload.imgs_storage_connection_string
   desc_storage_connection_string  = module.upload.desc_storage_connection_string

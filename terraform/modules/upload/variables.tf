@@ -37,7 +37,6 @@ variable "imgs_fun_service_plan_name" {
 variable "imgs_fun_app_name" {
   type        = string
   description = "Name of upload function application."
-  default     = "imgs-fun-app1"
 }
 
 variable "desc_storage_account_name" {

@@ -31,7 +31,6 @@ variable "cognitive_fa_service_plan_name" {
 variable "cognitive_fun_app_name" {
   type        = string
   description = "Name of cognitive cognitive fun app."
-  default     = "cognitive-fa1"
 }
 
 

@@ -70,7 +70,7 @@ resource "azurerm_linux_function_app" "imgs_fun_app" {
     }
     cors {
       allowed_origins     = [
-        "https://frontstorageacc1.blob.core.windows.net"
+        "https://frontstorageacc.blob.core.windows.net"
       ]
       support_credentials = false
     }

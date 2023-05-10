@@ -13,7 +13,7 @@ variable "res_group_location" {
 variable "images_storage_account_name" {
   type        = string
   description = "Name of upload storage account."
-  default     = "imgsstorageacc1"
+  default     = "imgsstorageacc"
 } 
 
 variable "image_container_name" {
@@ -25,7 +25,7 @@ variable "image_container_name" {
 variable "imgs_fun_storage_account_name" {
   type        = string
   description = "Name of upload storage account."
-  default     = "imgsfunstorageacc1"
+  default     = "imgsfunstorageacc"
 }
 
 variable "imgs_fun_service_plan_name" {
@@ -37,13 +37,13 @@ variable "imgs_fun_service_plan_name" {
 variable "imgs_fun_app_name" {
   type        = string
   description = "Name of upload function application."
-  default     = "imgs-fun-app1"
+  default     = "imgs-fun-app"
 }
 
 variable "desc_storage_account_name" {
   type        = string
   description = "Name of upload storage account."
-  default     = "descstorageacc1"
+  default     = "descstorageacc"
 }
 
 variable "desc_storage_table_name" {
@@ -55,7 +55,7 @@ variable "desc_storage_table_name" {
 variable "cognitive_fa_storage_acc_name" {
   type        = string
   description = "Name of cognitive storage account."
-  default     = "cognitivefunstorageacc1"
+  default     = "cognitivefunstorageacc"
 }
 
 variable "azurerm_cognitive_account_name" {
@@ -73,13 +73,13 @@ variable "cognitive_fa_service_plan_name" {
 variable "cognitive_fun_app_name" {
   type        = string
   description = "Name of cognitive cognitive fun app."
-  default     = "cognitive-fa1"
+  default     = "cognitive-fa"
 }
 
 variable "front_storage_account_name" {
   type        = string
   description = "Name of frontend storage account."
-  default     = "frontstorageacc1"
+  default     = "frontstorageacc"
 } 
 
 variable "frontend_container_name" {
