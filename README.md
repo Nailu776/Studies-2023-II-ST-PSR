@@ -19,7 +19,7 @@ After a while, the image is automatically described.
 # Instructions
 Clone repository:
 ```shell
-git clone https://gitlab.repozytoriumwiedzy.tech/studies/psroz_s102023.git
+git clone https://gitlab.hjhp.io/studies/psroz_s102023.git
 cd psroz_s102023
 ```
   
